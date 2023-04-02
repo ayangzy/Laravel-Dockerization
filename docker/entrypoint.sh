@@ -15,10 +15,15 @@ fi
 role=${CONTAINER_ROLE:-app}
 
 if [ "$role" = "app" ]; then
-    php artisan migrate
-    php artisan cache:clear
     php artisan config:clear
-    php artisan route:clear
+    php artisan migrate --force --seed
+    php artisan clear-compiled
+    php artisan auth:clear-resets
+    php artisan optimize:clear
+    php artisan config:cache
+    php artisan view:cache
+    php artisan route:cache
+    composer dump-autoload
     php artisan serve --port=$PORT --host=0.0.0.0 --env=.env
     exec docker-php-entrypoint "$@"
 elif [ "$role" = "queue" ]; then
