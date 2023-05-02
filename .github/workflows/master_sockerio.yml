@@ -7,8 +7,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "database/migrations/**.php"
+    # paths:
+    #   - "database/migrations/**.php"
   workflow_dispatch:
 
 jobs:
