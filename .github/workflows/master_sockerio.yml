@@ -40,7 +40,8 @@ jobs:
             -e DB_PORT=3306 \
             -e DB_DATABASE=mydb \
             -e DB_USERNAME=myuser \
-            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            laravelsocket.azurecr.io/laravelsocket:latest
 
   deploy:
     runs-on: ubuntu-latest
