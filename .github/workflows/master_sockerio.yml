@@ -35,13 +35,7 @@ jobs:
 
       - name: Running migrations and creating seeders
         run: |
-          docker run --rm \
-            -e DB_HOST=mydb \
-            -e DB_PORT=3306 \
-            -e DB_DATABASE=mydb \
-            -e DB_USERNAME=myuser \
-            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-            laravelsocket.azurecr.io/laravelsocket:latest
+          docker-compose up
 
   deploy:
     runs-on: ubuntu-latest
