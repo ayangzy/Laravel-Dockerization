@@ -42,7 +42,7 @@ jobs:
             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
             -e MYSQL_SSL=true \
-            laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
+            laravelsocket.azurecr.io/laravelsocket:latest
 
   deploy:
     runs-on: ubuntu-latest

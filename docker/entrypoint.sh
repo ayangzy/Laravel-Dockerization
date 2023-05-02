@@ -4,13 +4,13 @@ if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-progress --no-interaction
 fi
 
-if [ ! -f ".env" ]; then
-    echo "Creating env file for env $APP_ENV"
-    cp .env.example .env
-    php artisan key:generate
-else
-    echo "env file exists."
-fi
+# if [ ! -f ".env" ]; then
+#     echo "Creating env file for env $APP_ENV"
+#     cp .env.example .env
+#     php artisan key:generate
+# else
+#     echo "env file exists."
+# fi
 
 role=${CONTAINER_ROLE:-app}
 
@@ -24,7 +24,7 @@ if [ "$role" = "app" ]; then
     php artisan view:cache
     php artisan route:cache
     composer dump-autoload
-    php artisan serve --port=$PORT --host=0.0.0.0 --env=.env
+    php artisan serve --port=$PORT --host=0.0.0.0
     exec docker-php-entrypoint "$@"
 elif [ "$role" = "queue" ]; then
     echo "Running the queue ... "
