@@ -35,7 +35,7 @@ jobs:
 
       - name: Running migrations and creating seeders
         run: |
-          docker run --rm \
+          docker run -d \
             -e DB_HOST=mydb \
             -e DB_PORT=3306 \
             -e DB_DATABASE=mydb \
