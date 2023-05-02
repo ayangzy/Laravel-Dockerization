@@ -31,11 +31,11 @@ jobs:
         with:
           push: true
           tags: laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
-          file: ./Dockerfile
+          file: ./docker-compose
 
-      - name: Running migrations and creating seeders
-        run: |
-          docker-compose up
+      # - name: Running migrations and creating seeders
+      #   run: |
+      #     docker-compose up
 
   deploy:
     runs-on: ubuntu-latest
