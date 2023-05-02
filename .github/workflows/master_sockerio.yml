@@ -7,45 +7,58 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "database/migrations/**.php"
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Log in to registry
-      uses: docker/login-action@v1
-      with:
-        registry: https://laravelsocket.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_aaa15b9c9d8d4b08babfdcfa00d96a46 }}
+      - name: Log in to registry
+        uses: docker/login-action@v1
+        with:
+          registry: https://laravelsocket.azurecr.io/
+          username: ${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}
+          password: ${{ secrets.AzureAppService_ContainerPassword_aaa15b9c9d8d4b08babfdcfa00d96a46 }}
 
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
-        file: ./Dockerfile
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
+          file: ./Dockerfile
+
+      - name: Running migrations and creating seeders
+        run: |
+          docker run -it --rm \
+            -e DB_HOST=mydb \
+            -e DB_PORT=3306 \
+            -e DB_DATABASE=mydb \
+            -e DB_USERNAME=myuser \
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            laravelsocket.azurecr.io/laravelsocket:${{ github.sha }} \
+            php artisan migrate --force --seed
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'production'
+      name: "production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'sockerio'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2dce7dc179c84ff9ad290a0301bdd719 }}
-        images: 'laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}'
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "sockerio"
+          slot-name: "production"
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_2dce7dc179c84ff9ad290a0301bdd719 }}
+          images: "laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}"
