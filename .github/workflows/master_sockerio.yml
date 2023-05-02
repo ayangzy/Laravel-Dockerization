@@ -41,7 +41,7 @@ jobs:
             -e DB_DATABASE=mydb \
             -e DB_USERNAME=myuser \
             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-            laravelsocket.azurecr.io/laravelsocket:${{ github.sha }} \
+            laravelsocket.azurecr.io/laravelsocket:latest:${{ github.sha }} \
             php artisan migrate --force --seed
 
   deploy:
