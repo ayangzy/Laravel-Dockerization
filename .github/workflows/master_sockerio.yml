@@ -30,11 +30,14 @@ jobs:
           password: ${{ secrets.AzureAppService_ContainerPassword_aaa15b9c9d8d4b08babfdcfa00d96a46 }}
 
       - name: Build and push container image to registry
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
-          file: ./Dockerfile
+        run: |
+          docker-compose build
+          docker-compose push
+        # uses: docker/build-push-action@v2
+        # with:
+        #   push: true
+        #   tags: laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
+        #   file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
