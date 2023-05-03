@@ -38,7 +38,7 @@ jobs:
 
       - name: Running migrations and creating seeders
         run: |
-          docker run -d laravelsocket.azurecr.io/laravelsocket
+          docker run laravelsocket.azurecr.io/laravelsocket:latest
 
   deploy:
     runs-on: ubuntu-latest
