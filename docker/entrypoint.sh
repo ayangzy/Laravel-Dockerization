@@ -12,9 +12,9 @@ fi
 #     echo "env file exists."
 # fi
 
-# role=${CONTAINER_ROLE:-app}
+role=${CONTAINER_ROLE:-app}
 
-# if [ "$role" = "app" ]; then
+if [ "$role" = "app" ]; then
     php artisan config:clear
     php artisan migrate --force --seed
     php artisan clear-compiled
@@ -26,8 +26,8 @@ fi
     composer dump-autoload
     php artisan serve --port=$PORT --host=0.0.0.0
     exec docker-php-entrypoint "$@"
-# elif [ "$role" = "queue" ]; then
-#     echo "Running the queue ... "
-#     php /var/www/artisan queue:work --verbose --tries=3 --timeout=180
+elif [ "$role" = "queue" ]; then
+    echo "Running the queue ... "
+    php /var/www/artisan queue:work --verbose --tries=3 --timeout=180
 
-# fi
+fi

@@ -34,7 +34,7 @@ jobs:
         with:
           push: true
           tags: laravelsocket.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_7186bbbdf67346a1a5a28a027201facf }}/laravelsocket:${{ github.sha }}
-          file: ./Dockerfile
+          file: ./docker-compose.yml
 
   deploy:
     runs-on: ubuntu-latest
