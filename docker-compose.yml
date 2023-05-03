@@ -12,11 +12,14 @@ services:
       - APP_ENV=${APP_ENV}
       - CONTAINER_ROLE=app
     working_dir: /var/www
-    #image: laravelsocket.azurecr.io/laravelsocket:latest
+    image: laravelsocket.azurecr.io/laravelsocket:latest
     volumes:
       - ./:/var/www
     ports:
       - 8000:80
+
+    env_file:
+      - ./.env
 
     depends_on:
       - database
