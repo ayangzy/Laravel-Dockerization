@@ -16,7 +16,7 @@ services:
     volumes:
       - ./:/var/www
     ports:
-      - 8000:8000
+      - 8000:80
 
     depends_on:
       - database
