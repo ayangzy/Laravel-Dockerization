@@ -9,8 +9,14 @@ on:
       - master
   pull_request:
     branches:
-      - master
+      - "*"
   workflow_dispatch:
+
+env:
+  DB_HOST: ${{ secrets.DB_HOST}}
+  DB_DATABASE: ${{ secrets.DB_DATABASE}}
+  DB_USERNAME: ${{ secrets.DB_USERNAME}}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
 
 jobs:
   build:
