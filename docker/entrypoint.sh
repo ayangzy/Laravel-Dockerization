@@ -24,7 +24,7 @@ if [ "$role" = "app" ]; then
     php artisan view:cache
     php artisan route:cache
     composer dump-autoload
-    php artisan serve --port=$PORT --host=0.0.0.0
+    php artisan serve --host=0.0.0.0 --port=80 
     exec docker-php-entrypoint "$@"
 elif [ "$role" = "queue" ]; then
     echo "Running the queue ... "
