@@ -9,7 +9,7 @@ services:
       args:
         - APP_ENV=${APP_ENV}
     environment:
-      - APP_ENV=${APP_ENV}
+      # - APP_ENV=${APP_ENV}
       - CONTAINER_ROLE=app
     working_dir: /var/www
     image: laravelsocket.azurecr.io/laravelsocket:latest
@@ -27,19 +27,19 @@ services:
     image: mysql:8.0
     ports:
       - 3304:3306
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD= 0
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    # environment:
+    #   - MYSQL_ALLOW_EMPTY_PASSWORD= 0
+    #   - MYSQL_DATABASE=${DB_DATABASE}
+    #   - MYSQL_USER=${DB_USERNAME}
+    #   - MYSQL_PASSWORD=${DB_PASSWORD}
+    #   - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/mysql
 
   #Redis Server
   redis:
     image: redis:alpine
-    command: redis-server --appendonly yes --requirepass  "${REDIS_PASSWORD}"
+    # command: redis-server --appendonly yes --requirepass  "${REDIS_PASSWORD}"
     ports:
       - 6379:6379
 
