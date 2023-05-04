@@ -14,7 +14,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       # checkout the repo
       - name: "Checkout GitHub Action"
@@ -30,15 +29,6 @@ jobs:
           login-server: skrind.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      # - run: |
-      #     docker build . -t skrind.azurecr.io/skrind:${{ github.sha }}
-      #     docker push skrind.azurecr.io/skrind:${{ github.sha }}
-
-      - name: "Set up Docker Compose"
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-          docker-compose version
 
       - name: "Build and push container images"
         run: |
@@ -71,7 +61,6 @@ jobs:
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           name: skrind
-          #restart-policy: Always
           ports: |
             80
           location: "east us"
