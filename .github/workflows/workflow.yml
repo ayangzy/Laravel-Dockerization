@@ -71,7 +71,7 @@ jobs:
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           name: skrind
-          restart-policy: Always
+          #restart-policy: Always
           ports: |
             80
           location: "east us"
