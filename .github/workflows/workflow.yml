@@ -1,16 +1,17 @@
-name: Deployment
-concurrency:
-  group: production
-  cancel-in-progress: true
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - "*"
-  workflow_dispatch:
-
+# name: Deployment
+# concurrency:
+#   group: production
+#   cancel-in-progress: true
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - "*"
+#   workflow_dispatch:
+on: [push]
+name: Linux_Container_Workflow
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,12 +20,6 @@ jobs:
       # checkout the repo
       - name: "Checkout GitHub Action"
         uses: actions/checkout@master
-
-      - name: Set up Azure CLI
-        uses: azure/cli@v1
-        with:
-          inlineScript: |
-            az --version
 
       - name: "Login via Azure CLI"
         uses: azure/login@v1
