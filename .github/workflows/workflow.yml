@@ -55,7 +55,7 @@ jobs:
         with:
           resource-group: skrind-SG
           dns-name-label: skrind
-          image: skrind.azurecr.io/skrind:${{ github.sha }}
+          image: skrind.azurecr.io/skrind:latest
           #cpu: 1 #Optional
           #memory: 0.1 #Optional
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
