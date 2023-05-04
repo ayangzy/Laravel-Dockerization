@@ -21,9 +21,10 @@ jobs:
         uses: actions/checkout@master
 
       - name: Set up Azure CLI
-        uses: azure/setup-azure-cli@v1
+        uses: azure/cli@v1
         with:
-          az-version: "latest"
+          inlineScript: |
+            az --version
 
       - name: "Login via Azure CLI"
         uses: azure/login@v1
