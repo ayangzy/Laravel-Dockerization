@@ -64,7 +64,7 @@ jobs:
         uses: "azure/aci-deploy@v1"
         with:
           resource-group: skrind-SG
-          dns-name-label: skrind.d8bucrdzfkg6cugc.eastus.azurecontainer.io
+          dns-name-label: skrind
           image: skrind.azurecr.io/skrind:${{ github.sha }}
           #cpu: 1 #Optional
           #memory: 0.1 #Optional
