@@ -1,0 +1,74 @@
+name: Deployment
+concurrency:
+  group: production
+  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # checkout the repo
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@master
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: skrind.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      # - run: |
+      #     docker build . -t skrind.azurecr.io/skrind:${{ github.sha }}
+      #     docker push skrind.azurecr.io/skrind:${{ github.sha }}
+
+      - name: "Set up Docker Compose"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+          docker-compose version
+
+      - name: "Build and push container images"
+        run: |
+          export IMAGE_TAG=${{ github.sha }}
+          docker-compose build
+          docker-compose push
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    steps:
+      # checkout the repo
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@master
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Deploy to Azure Container Instances"
+        uses: "azure/aci-deploy@v1"
+        with:
+          resource-group: skrind-SG
+          dns-name-label: url-for-container
+          image: skrind.azurecr.io/skrind:${{ github.sha }}
+          #cpu: 1 #Optional
+          #memory: 0.1 #Optional
+          registry-username: ${{ secrets.REGISTRY_USERNAME }}
+          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          name: skrind
+          location: "east us"
