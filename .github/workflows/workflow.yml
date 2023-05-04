@@ -1,7 +1,7 @@
 name: Deployment
-# concurrency:
-#   group: production
-#   cancel-in-progress: true
+concurrency:
+  group: production
+  cancel-in-progress: true
 on:
   push:
     branches:
@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    #environment: production
+    environment: production
     steps:
       # checkout the repo
       - name: "Checkout GitHub Action"
@@ -60,6 +60,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Delete existing container group
+        uses: azure/container-instances-delete@v1
+        with:
+          resource-group: skrind-SG
+          container-group-name: skrind
+
       - name: "Deploy to Azure Container Instances"
         uses: "azure/aci-deploy@v1"
         with:
@@ -71,4 +77,7 @@ jobs:
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           name: skrind
+          restart-policy: Always
+          ports: |
+            80
           location: "east us"
