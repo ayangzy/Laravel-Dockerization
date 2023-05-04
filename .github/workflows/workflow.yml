@@ -20,6 +20,11 @@ jobs:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@master
 
+      - name: Set up Azure CLI
+        uses: azure/setup-azure-cli@v1
+        with:
+          az-version: "latest"
+
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
